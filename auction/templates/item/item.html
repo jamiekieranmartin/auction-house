@@ -1,0 +1,92 @@
+{% extends "_layout.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+<main class="py-5">
+  <section class="container">
+    <section class="row mb-5">
+      <article class="col-lg-8">
+        <img src="{{ url_for('static', filename='uploads/' + item.image) }}" class="shadow h-100 object-cover w-100"
+          alt="Item">
+      </article>
+
+      <article class="col-lg-4">
+        <div class="paper gutter p-4">
+          <div class="float-right">
+
+            {% if item.open %}
+            <span class="ml-3 mr-1 badge bg-success white rounded-pill" data-toggle="tooltip" data-placement="bottom"
+              title="Auction open!">{{ item.starting_price_humanise() }}</span>
+            {% else %}
+            <span class="ml-3 mr-1 badge bg-danger white rounded-pill" data-toggle="tooltip" data-placement="bottom"
+              title="Auction closed!">{{ item.starting_price_humanise() }}</span>
+            {% endif %}
+
+            <span class="badge bg-dark white rounded-pill" data-toggle="tooltip" data-placement="bottom"
+              title="Category">{{ item.category_humanise() }}</span>
+          </div>
+
+          <h2 class="gutter">{{ item.name }}</h2>
+
+          <p>{{ item.description }}</p>
+
+          <small class="font-weight-light">Listed {{ item.date_humanise() }} by {{ item.user.name }}</small>
+        </div>
+
+        <div class="paper gutter p-4">
+           <span class="ml-md-3 my-2 my-md-0 badge bg-dark rounded-pill float-md-right">{{ item.bid_count() }} bids</span>
+          <h3 class="gutter">Latest bid</h3>
+          
+          <div>
+            {% if item.bid_count() > 0 %}
+            <p class="text-muted float-right">{{ item.top_bid_date_humanise() }}</p>
+            <p>{{ item.top_bid_humanise() }}</p>
+            {% else %}
+            <small>No bids</small>
+            {% endif %}
+          </div>
+        </div>
+
+        {% if item.open %}
+        <div class="paper gutter p-4">
+          <h3 class="gutter">Actions</h3>
+          <div>
+            {% if current_user.is_authenticated %}
+            {% if current_user.id != item.user_id %}
+            {% if watched %}
+            <a href="{{ url_for('watchlist.remove', item_id=item.id) }}" class="btn btn-danger w-100 mb-2">
+              Remove from Watchlist
+            </a>
+            {% else %}
+            <a href="{{ url_for('watchlist.add', item_id=item.id) }}" class="btn btn-primary w-100 mb-2">
+              Add to Watchlist
+            </a>
+            {% endif %}
+            <a href="{{ url_for('bid.item', id=item.id) }}" class="btn btn-success w-100 mb-2">
+              Bid
+            </a>
+            {% else %}
+            <a href="{{ url_for('item.close', id=item.id) }}" class="btn btn-danger w-100 mb-2">
+              Close auction
+            </a>
+            <a href="{{ url_for('bid.item', id=item.id) }}" class="btn btn-success w-100 mb-2">
+              View bids
+            </a>
+            {% endif %}
+            {% else %}
+            <small class="font-weight-light">
+              <a href="{{ url_for('auth.login') }}">Login</a>
+              or
+              <a href="{{ url_for('auth.register') }}">register</a>
+              to bid
+            </small>
+            {% endif %}
+
+          </div>
+        </div>
+        {% endif %}
+
+      </article>
+    </section>
+</main>
+
+{% endblock content %}

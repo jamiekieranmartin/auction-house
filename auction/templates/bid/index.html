@@ -1,0 +1,25 @@
+{% extends '_layout.html' %} {% import "bootstrap/wtf.html" as wtf %} {% block
+content %}
+
+<div class="container">
+  <div class="row my-4">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+      <span
+        class="ml-md-3 my-2 my-md-0 badge bg-success rounded-pill float-md-right"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="Current bid"
+      >
+        {{ item.top_bid_humanise() }}
+      </span>
+
+      <h1>Bid</h1>
+
+      {{wtf.quick_form(form)}}
+    </div>
+    <div class="col-md-4"></div>
+  </div>
+</div>
+
+{% endblock %}

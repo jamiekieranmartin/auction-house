@@ -1,0 +1,60 @@
+{% extends "_layout.html" %}
+{% block content %}
+<main class="py-5" style="min-height: 700px;">
+  <section class="container paper px-0">
+    <nav class="navbar my-2 p-4">
+      <h2 class="my-auto">Watchlist</h2>
+    </nav>
+
+    <section class="list-group">
+
+      {% if watchlist|length %}
+      {% for watched in watchlist %}
+      <div class="list-group-item d-flex align-items-center">
+
+        <div
+          role="img" 
+          aria-label="{{ watched.item.name }}"
+          style="width: 5rem; height: 5rem; background-image: url({{ url_for('static', filename='uploads/' + watched.item.image) }}); background-size: cover; background-position: center;" 
+          class="shadow object-cover mr-3">
+        </div>
+
+        <div class="flex-grow-1">
+          <div class="d-flex w-100 justify-content-between">
+            <div>
+              <h5 class="d-inline mt-2 mb-1">{{ watched.item.name }}</h5>
+              {% if watched.item.open %}
+              <span class="ml-md-3 my-2 my-md-0 badge bg-success rounded-pill float-md-right" data-toggle="tooltip"
+                data-placement="bottom" title="Bids open!">{{ watched.item.top_bid_humanise() }}</span>
+              {% else %}
+              <span class="ml-md-3 my-2 my-md-0 badge bg-danger rounded-pill float-md-right" data-toggle="tooltip"
+                data-placement="bottom" title="Bids closed!">{{ watched.item.top_bid_humanise() }}</span>
+              {% endif %}
+            </div>
+
+            <div>
+              <a href="{{ url_for('item.index', id=watched.item.id) }}" class="btn btn-primary my-auto mr-3">View</a>
+
+              <a href="{{ url_for('watchlist.remove', item_id=watched.item.id) }}"
+                class="btn btn-danger my-auto mr-3">Remove</a>
+
+              <small class="text-muted">{{ watched.item.bid_count() }} bids since {{ watched.item.date_humanise() }}</small>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+      {% endfor %}
+      {% else %}
+      <div href="#" class="list-group-item d-flex align-items-center">
+        <small class="w-100 text-center font-weight-light my-5 py-5">Add items to your watchlist and keep track of them
+          here!</small>
+      </div>
+      {% endif %}
+
+
+    </section>
+
+</main>
+{% endblock content %}

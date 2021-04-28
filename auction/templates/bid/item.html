@@ -1,0 +1,45 @@
+{% extends "_layout.html" %}
+{% block content %}
+<main class="py-5" style="min-height: 700px;">
+  <section class="container paper px-0">
+    <nav class="navbar my-2 p-4">
+      <h2 class="my-auto">Bids for {{ item.name }}</h2>
+       
+      <div class="navbar">
+       <a href="{{ url_for('item.index', id=item.id) }}" class="btn btn-primary my-auto mr-3">View</a>
+
+        <span class="ml-md-3 my-2 my-md-0 badge {{ 'bg-success' if item.open else 'bg-danger' }} rounded-pill float-md-right">{{ 'Open' if item.open else 'Closed' }}</span>
+      </div>
+  
+    </nav>
+
+    <section class="list-group">
+
+      {% if bids|length %}
+      {% for bid in bids %}
+      <div class="list-group-item d-flex align-items-center">
+          <div class="flex-grow-1">
+          <div class="d-flex w-100 justify-content-between">
+            <div>
+              <h5 class="d-inline mt-2 mb-1">{{ bid.user.name }}</h5>
+     
+              <span class="ml-md-3 my-2 my-md-0 badge bg-dark rounded-pill float-md-right">{{ bid.bid_humanise() }}</span>
+            </div>
+
+            <div>
+              <small class="text-muted">{{ bid.date_humanise() }}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      {% else %}
+      <div href="#" class="list-group-item d-flex align-items-center">
+        <small class="w-100 text-center font-weight-light my-5 py-5">Keep track of bids here!</small>
+      </div>
+      {% endif %}
+
+    </section>
+
+</main>
+{% endblock content %}

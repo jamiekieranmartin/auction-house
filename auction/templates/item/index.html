@@ -1,0 +1,68 @@
+{% extends "_layout.html" %}
+{% block content %}
+<main class="py-5" style="min-height: 750px;">
+  <section class="container paper px-0">
+    <nav class="navbar my-2 p-4">
+      <h2 class="my-auto">Items</h2>
+
+      <li class="nav-item d-flex content-center align-center">
+        <a class="mx-2 btn btn-dark" type="button" href="{{ url_for('item.create') }}">Create Item</a>
+      </li>
+    </nav>
+
+    <section class="list-group">
+
+      {% if items|length %}
+      {% for item in items %}
+      <div class="list-group-item  d-flex align-items-center">
+
+        <div
+          role="img" 
+          aria-label="{{ item.name }}"
+          style="width: 5rem; height: 5rem; background-image: url({{ url_for('static', filename='uploads/' + item.image) }}); background-size: cover; background-position: center;" 
+          class="shadow object-cover mr-3">
+        </div>
+        
+        <div class="flex-grow-1">
+          <div class="d-flex w-100 justify-content-between">
+
+            <div>
+              <h5 class="d-inline mt-2 mb-1">{{ item.name }}</h5>
+              {% if item.open %}
+              <span class="ml-md-3 my-2 my-md-0 badge bg-success rounded-pill float-md-right" data-toggle="tooltip"
+                data-placement="bottom" title="Bid open!">{{ item.starting_price_humanise() }}</span>
+              {% else %}
+              <span class="ml-md-3 my-2 my-md-0 badge bg-danger rounded-pill float-md-right" data-toggle="tooltip"
+                data-placement="bottom" title="Bid closed!">{{ item.starting_price_humanise() }}</span>
+              {% endif %}
+            </div>
+
+            <div>
+              <a href="{{ url_for('item.index', id=item.id) }}" class="btn btn-primary my-auto mr-3">View Item</a>
+
+              <a href="{{ url_for('bid.item', id=item.id) }}" class="btn btn-success my-auto mr-3">View Bids</a>
+
+              {% if item.open %}
+              <a href="{{ url_for('item.close', id=item.id) }}" class="btn btn-danger my-auto mr-3">Close</a>
+              {% endif %}
+
+              <small class="text-muted">{{ item.date_humanise() }}</small>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+      {% endfor %}
+      {% else %}
+      <div href="#" class="list-group-item d-flex align-items-center">
+        <small class="w-100 text-center font-weight-light my-5 py-5">Add items and keep track of them
+          here!</small>
+      </div>
+      {% endif %}
+
+
+    </section>
+
+</main>
+{% endblock content %}

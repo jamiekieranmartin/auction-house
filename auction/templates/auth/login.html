@@ -1,0 +1,22 @@
+{% extends '_layout.html' %} {% import "bootstrap/wtf.html" as wtf %} {% block
+    content %}
+    
+    <div class="container">
+      <div class="row my-4">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+          <h1>Login</h1>
+    
+          {{wtf.quick_form(form)}}
+    
+          <p class="mt-3">
+            New user?
+            <a href="{{ url_for('auth.register') }}">Click here to register</a>.
+          </p>
+        </div>
+        <div class="col-md-4"></div>
+      </div>
+    </div>
+    
+    {% endblock %}
+    

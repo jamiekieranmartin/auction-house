@@ -1,0 +1,76 @@
+{% extends "_layout.html" %} {% import "bootstrap/wtf.html" as wtf %} {% block
+content %}
+<main class="py-5">
+  <section class="container py-5">
+    <h1 class="px-5 mx-5 text-center">Welcome to Paintr</h1>
+  </section>
+
+  <section class="container pt-5">
+    <nav class="navbar my-2">
+      <h2 class="my-auto">Popular Items</h2>
+
+      <style>
+        .navbar form {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .navbar form .form-group {
+          margin-right: 0.5rem;
+        }
+      </style>
+      <div>
+        <h7><strong>Press filter to apply changes</strong></h7>
+        {{wtf.quick_form(form)}}
+      </div>
+    </nav>
+  </section>
+
+  <section class="row m-0 justify-content-center">
+    {% if items|length %} {% for item in items %}
+
+    <article class="col-md-6 col-lg-2 p-2">
+      <div class="card w-100">
+        <a
+          href="{{ url_for('item.index', id=item.id) }}"
+          style="background-image: url({{ url_for('static', filename='uploads/' + item.image) }}); background-size: cover; background-position: center; width: 100%; padding: 5% 0 92.5% 2.5%"
+          class="paper"
+        >
+          <!-- Let user know if bid is open or closed -->
+          <h6
+            class="badge {{ 'bg-success' if item.open else 'bg-danger' }} rounded-pill"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="{{ 'Bids open!' if item.open else 'Bids closed!' }}"
+          >
+            {{ item.top_bid_humanise() }}
+          </h6>
+        </a>
+
+        <div class="card-body d-flex flex-column paper">
+          <h5 class="card-title">{{ item.name }}</h5>
+
+          <p class="small card-text">{{ item.description }}</p>
+
+          <small class="text-muted mb-3">
+            {{ item.bid_count() }} bids since {{ item.date_humanise() }}
+          </small>
+
+          <a
+            href="{{ url_for('item.index', id=item.id) }}"
+            class="float-right mt-auto btn btn-dark"
+          >
+            View Item
+          </a>
+        </div>
+      </div>
+    </article>
+
+    {% endfor %} {% else %}
+    <small class="col-md-6 col-lg-2 py-5 my-5 text-center"> No items </small>
+    {% endif %}
+  </section>
+</main>
+
+{% endblock content %}

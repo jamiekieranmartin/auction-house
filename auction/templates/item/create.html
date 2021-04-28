@@ -1,0 +1,15 @@
+{% extends "_layout.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+<main class="py-5">
+  <section class="container">
+    <div class="row g-3">
+      <div class="paper p-4 col-md-10 offset-md-1 offset-lg-2 col-lg-8">
+      
+        <h2 class="gutter">{{ title }}</h2>
+
+        {{wtf.quick_form(form)}}
+      </div>
+    </div>
+</main>
+{% endblock content %}
